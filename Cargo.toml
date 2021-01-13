@@ -10,7 +10,7 @@ license = "Apache-2.0"
 name = "cassandra-cpp-sys"
 version = "0.12.2"
 authors = ["Tupshin Harper <tupshin@tupshin.com>", "Keith Wansbrough <Keith.Wansbrough@metaswitch.com>"]
-links = "cassandra"
+links = "cassandra_static"
 build = "build.rs"
 
 [badges]
@@ -19,9 +19,27 @@ travis-ci = { repository = "Metaswitch/cassandra-sys-rs" }
 [lib]
 name = "cassandra_cpp_sys"
 
+[dependencies]
+libuv-sys2 = { optional = true, version = "1.40.0" }
+libz-sys = { optional = true, version = "1.1.0", features = [] }
+openssl-sys = { optional = true, version = "0.9.58", features = ["vendored"] }
+
+[build-dependencies]
+cmake = {optional = true, verison  = "0.1.45" }
+
 [dev-dependencies]
 log = "0.4"
 env_logger = "0.8"
 
 [features]
 default=[]
+vendored-cmake=[
+    "libuv-sys2/vendored-cmake",
+    "libz-sys/static",
+    "openssl-sys/vendored",
+    "cmake",
+]
+
+
+[patch.crates-io]
+libuv-sys2 = { git = "https://github.com/sgg/libuv-sys/", branch = "sgg/build_with_cmake" }
